@@ -56,10 +56,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 //                mContext,
 //                media.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
 //        holder.albumImageView.setBackgroundResource(drawable.ic_media_play);
-        holder.albumImageView.setImageResource(drawable.ic_media_play);
-        holder.albumImageView.setBackgroundColor(Color.GRAY);
-        holder.albumTextView.setText("Jazz_In_Paris");
-        holder.albumTextView.setTextColor(Color.BLACK);
+        holder.songImageView.setImageResource(drawable.ic_media_play);
+        holder.songImageView.setBackgroundColor(Color.GRAY);
+        holder.songTextView.setText("Jazz_In_Paris");
+        holder.songTextView.setTextColor(Color.BLACK);
     }
 
     @Override
@@ -69,15 +69,19 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public CardView albumCardView;
-        public TextView albumTextView;
-        public ImageView albumImageView;
+        public CardView songCardView;
+        public TextView songTextView;
+        public TextView songArtistTextView;
+        public TextView songTimeTextView;
+        public ImageView songImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            albumCardView = (CardView) itemView.findViewById(R.id.card_view);
-            albumTextView = (TextView) itemView.findViewById(R.id.card_album_text);
-            albumImageView = (ImageView) itemView.findViewById(R.id.card_album_img);
+            songCardView = (CardView) itemView.findViewById(R.id.card_view);
+            songTextView = (TextView) itemView.findViewById(R.id.card_song_name);
+            songImageView = (ImageView) itemView.findViewById(R.id.card_song_img);
+            songArtistTextView = (TextView) itemView.findViewById(R.id.card_song_artist);
+            songTimeTextView = (TextView) itemView.findViewById(R.id.card_song_time);
         }
     }
 

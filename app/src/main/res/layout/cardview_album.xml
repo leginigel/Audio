@@ -24,16 +24,24 @@
                 android:id="@+id/card_album_img"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_margin="5dp"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/card_album_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="Jazz_In_Taiwan"
                 android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/card_album_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artist"
+                android:layout_marginLeft="10dp"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

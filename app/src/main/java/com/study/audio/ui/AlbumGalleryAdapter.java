@@ -69,12 +69,14 @@ class AlbumGalleryAdapter extends RecyclerView.Adapter<AlbumGalleryAdapter.ViewH
 
         public CardView albumCardView;
         public TextView albumTextView;
+        public TextView albumArtistTextView;
         public ImageView albumImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             albumCardView = (CardView) itemView.findViewById(R.id.card_view);
             albumTextView = (TextView) itemView.findViewById(R.id.card_album_text);
+            albumArtistTextView = (TextView) itemView.findViewById(R.id.card_album_artist);
             albumImageView = (ImageView) itemView.findViewById(R.id.card_album_img);
         }
     }

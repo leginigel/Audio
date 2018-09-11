@@ -1,11 +1,13 @@
 package com.study.audio.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,13 +19,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.study.audio.MusicData;
 import com.study.audio.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPagerActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,14 @@ public class ViewPagerActivity extends AppCompatActivity {
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
+
+
+        ActivityCompat.requestPermissions(
+                ViewPagerActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                999
+        );
+
     }
 
     @Override
@@ -69,7 +84,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
     public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        final int PAGE_COUNT =3 ;
+        final int PAGE_COUNT = 2;
         private String tabTitles[] = new String[] {"Linear", "Grid", "Tab3"};
         private Context context;
 

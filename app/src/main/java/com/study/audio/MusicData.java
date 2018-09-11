@@ -12,8 +12,9 @@ public class MusicData implements Parcelable{
     private long albumId;
     private long duration;
     private String path;
+    private String displayname;
 
-    public MusicData(long id, String title, String artist, String album, long albumId, long duration, String path) {
+    public MusicData(long id, String title, String artist, String album, long albumId, long duration, String path, String displayname) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -21,6 +22,7 @@ public class MusicData implements Parcelable{
         this.albumId = albumId;
         this.duration = duration;
         this.path = path;
+        this.displayname = displayname;
     }
 
     protected MusicData(Parcel in) {
@@ -31,6 +33,7 @@ public class MusicData implements Parcelable{
         albumId = in.readLong();
         duration = in.readLong();
         path = in.readString();
+        displayname = in.readString();
     }
 
     public static final Creator<MusicData> CREATOR = new Creator<MusicData>() {
@@ -101,6 +104,14 @@ public class MusicData implements Parcelable{
         this.path = path;
     }
 
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -115,5 +126,6 @@ public class MusicData implements Parcelable{
         parcel.writeLong(albumId);
         parcel.writeLong(duration);
         parcel.writeString(path);
+        parcel.writeString(displayname);
     }
 }

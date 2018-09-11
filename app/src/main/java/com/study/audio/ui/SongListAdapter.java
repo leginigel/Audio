@@ -8,22 +8,29 @@ import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.study.audio.MusicData;
 import com.study.audio.R;
+
+import java.util.List;
 
 
 public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHolder>{
 
     private Context mContext;
     private MediaMetadataCompat media;
+    private List<MusicData> musicDataList;
 
-    public SongListAdapter() {
+    public SongListAdapter(List<MusicData> musicDataList) {
         // TODO: 2018/9/3 Constructor with Music Structure
+
+        this.musicDataList = musicDataList;
     }
 
     @NonNull
@@ -51,13 +58,17 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 //        holder.albumImageView.setBackgroundResource(drawable.ic_media_play);
         holder.songImageView.setImageResource(drawable.ic_media_play);
         holder.songImageView.setBackgroundColor(Color.GRAY);
-        holder.songTextView.setText("Jazz_In_Paris");
+        holder.songArtistTextView.setText(musicDataList.get(position).getArtist());
+
+        holder.songTextView.setText(musicDataList.get(position).getTitle());
         holder.songTextView.setTextColor(Color.BLACK);
+        holder.songTextView.setEllipsize(TextUtils.TruncateAt.END);
+        holder.songTextView.setSingleLine(true);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return musicDataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

@@ -11,7 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.study.audio.MusicData;
 import com.study.audio.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +24,8 @@ public class PageFragment extends Fragment {
 
     private int mPage;
     private String mTitle;
+
+    private List<MusicData> music = new ArrayList<>();
 
     public static Fragment newInstance(int page, String title) {
         Bundle args = new Bundle();
@@ -35,6 +41,7 @@ public class PageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt("PAGE");
         mTitle = getArguments().getString("Title");
+        music = MusicUtil.getMusicData(getActivity());
     }
 
     @Override
@@ -48,7 +55,7 @@ public class PageFragment extends Fragment {
                 (ViewGroup.MarginLayoutParams) rv.getLayoutParams();
         //Adapter
         AlbumGalleryAdapter albumAdapter = new AlbumGalleryAdapter();
-        SongListAdapter songAdapter = new SongListAdapter();
+        SongListAdapter songAdapter = new SongListAdapter(music);
 
         //LayoutManager
         LinearLayoutManager linearLayoutManager =

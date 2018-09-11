@@ -15,30 +15,30 @@ import android.widget.TextView;
 
 import com.study.audio.R;
 
-
-class AlbumGalleryAdapter extends RecyclerView.Adapter<AlbumGalleryAdapter.ViewHolder>{
+public class SongTextAdapter extends RecyclerView.Adapter<SongTextAdapter.ViewHolder>{
 
     private Context mContext;
     private MediaMetadataCompat media;
 
-    public AlbumGalleryAdapter() {
+
+    public SongTextAdapter() {
         // TODO: 2018/9/3 Constructor with Music Structure
     }
 
     @NonNull
     @Override
-    public AlbumGalleryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SongTextAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
-        View albumView = inflater.inflate(R.layout.cardview_album, parent, false);
+        View songView = inflater.inflate(R.layout.textview_song, parent, false);
 
-        return new AlbumGalleryAdapter.ViewHolder(albumView);
+        return new SongTextAdapter.ViewHolder(songView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlbumGalleryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongTextAdapter.ViewHolder holder, int position) {
 
         // TODO: 2018/8/20 Load the Media Data
 
@@ -47,33 +47,30 @@ class AlbumGalleryAdapter extends RecyclerView.Adapter<AlbumGalleryAdapter.ViewH
 //        holder.albumImageView.setImageBitmap(MusicLibrary.getAlbumBitmap(
 //                mContext,
 //                media.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
-        holder.albumImageView.setImageResource(android.R.drawable.ic_media_play);
-        holder.albumImageView.setBackgroundColor(Color.GRAY);
-        holder.albumTextView.setText("Jazz_In_Paris");
-        holder.albumTextView.setTextColor(Color.BLACK);
+//        holder.albumImageView.setBackgroundResource(drawable.ic_media_play);
+
+        holder.songTextView.setText("Jazz_In_Paris");
+        holder.songTextView.setTextColor(Color.BLACK);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 20;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public CardView albumCardView;
-        public TextView albumTextView;
-        public TextView albumArtistTextView;
-        public ImageView albumImageView;
+        public TextView songTextView;
+        public TextView songArtistTextView;
+        public TextView songTimeTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            albumCardView = (CardView) itemView.findViewById(R.id.card_view);
-            albumTextView = (TextView) itemView.findViewById(R.id.card_album_text);
-            albumArtistTextView = (TextView) itemView.findViewById(R.id.card_album_artist);
-            albumImageView = (ImageView) itemView.findViewById(R.id.card_album_img);
+            songTextView = (TextView) itemView.findViewById(R.id.text_song_name);
+            songArtistTextView = (TextView) itemView.findViewById(R.id.text_song_artist);
+            songTimeTextView = (TextView) itemView.findViewById(R.id.text_song_time);
 
-            albumCardView.setOnClickListener(this);
-
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -81,7 +78,7 @@ class AlbumGalleryAdapter extends RecyclerView.Adapter<AlbumGalleryAdapter.ViewH
 
             // TODO: 2018/9/3 Pass the Music Content and Start the Activity
 
-            Intent i = new Intent(mContext, SongActivity.class);
+            Intent i = new Intent(mContext, AudioPlayerActivity.class);
             i.putExtra("",0);
             mContext.startActivity(i);
         }

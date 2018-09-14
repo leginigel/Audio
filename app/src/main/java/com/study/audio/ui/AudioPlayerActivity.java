@@ -1,5 +1,6 @@
 package com.study.audio.ui;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -13,18 +14,54 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.study.audio.MusicData;
 import com.study.audio.R;
 
+import java.util.List;
+
 public class AudioPlayerActivity extends AppCompatActivity {
+
+    private List<MusicData> musicDataList;
+    private TextView titleTextView;
+    private TextView artistTextView;
+    private int currentPosition;
+    private ImageView albumImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_player);
+
+        musicDataList = getIntent().getParcelableArrayListExtra("musicList");
+        currentPosition = getIntent().getIntExtra("currentPosition", 0);
+
+        albumImg = findViewById(R.id.album_art);
+        titleTextView = findViewById(R.id.song_title);
+        artistTextView = findViewById(R.id.song_artist);
+
+        RequestOptions requestOptions =
+                new RequestOptions().centerCrop()
+                        .placeholder(R.drawable.ic_album_black_24dp);
+        Glide.with(this)
+                .load(musicDataList.get(currentPosition).getAlbumId())
+                .apply(requestOptions)
+                .into(albumImg);
+
+        titleTextView.setText(musicDataList.get(currentPosition).getTitle());
+        artistTextView.setText(musicDataList.get(currentPosition).getArtist());
+
+        final ClickListener clickListener = new ClickListener();
+        findViewById(R.id.button_previous).setOnClickListener(clickListener);
+        findViewById(R.id.button_play).setOnClickListener(clickListener);
+        findViewById(R.id.button_next).setOnClickListener(clickListener);
 
         Button b = (Button) findViewById(R.id.button_vol);
         b.setOnClickListener(new View.OnClickListener(){
@@ -74,10 +111,6 @@ public class AudioPlayerActivity extends AppCompatActivity {
             }
         });
 
-        final ClickListener clickListener = new ClickListener();
-        findViewById(R.id.button_previous).setOnClickListener(clickListener);
-        findViewById(R.id.button_play).setOnClickListener(clickListener);
-        findViewById(R.id.button_next).setOnClickListener(clickListener);
     }
 
     private class ClickListener implements View.OnClickListener {

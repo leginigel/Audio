@@ -4,20 +4,25 @@ import android.R.drawable;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.study.audio.MusicData;
 import com.study.audio.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,14 +55,17 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 
         // TODO: 2018/8/20 Load the Media Data
 
-//        media = MusicLibrary.getMetadata(mContext,"Jazz_In_Paris");
-//        holder.albumCardView.setBackgroundResource(R.drawable.album_youtube_audio_library_rock_2);
-//        holder.albumImageView.setImageBitmap(MusicLibrary.getAlbumBitmap(
-//                mContext,
-//                media.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
-//        holder.albumImageView.setBackgroundResource(drawable.ic_media_play);
-        holder.songImageView.setImageResource(drawable.ic_media_play);
-        holder.songImageView.setBackgroundColor(Color.GRAY);
+        RequestOptions requestOptions =
+                new RequestOptions().centerCrop()
+                        .placeholder(R.drawable.ic_album_black_24dp);
+
+        Glide.with(mContext)
+                .load(musicDataList.get(position).getAlbumId())
+                .apply(requestOptions)
+                .into(holder.songImageView);
+
+//        holder.songImageView.setImageResource(drawable.ic_media_play);
+//        holder.songImageView.setBackgroundColor(Color.GRAY);
         holder.songArtistTextView.setText(musicDataList.get(position).getArtist());
 
         holder.songTextView.setText(musicDataList.get(position).getTitle());
@@ -96,7 +104,8 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
             // TODO: 2018/9/3 Pass the Music Content and Start the Activity
 
             Intent i = new Intent(mContext, AudioPlayerActivity.class);
-            i.putExtra("",0);
+            i.putParcelableArrayListExtra("musicList", (ArrayList<? extends Parcelable>) musicDataList);
+            i.putExtra("currentPosition", getLayoutPosition());
             mContext.startActivity(i);
         }
     }

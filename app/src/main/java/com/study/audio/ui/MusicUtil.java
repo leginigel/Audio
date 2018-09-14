@@ -15,11 +15,11 @@ import java.util.List;
 
 public class MusicUtil {
     private static final String TAG = MusicUtil.class.getName();
+
     public static List<MusicData> getMusicData(Context context){
 
         Log.i(TAG,"getMusicData");
-
-        List<MusicData> musicData = new ArrayList<MusicData>();
+        List<MusicData> musicData = new ArrayList<>();
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = null;
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -34,11 +34,11 @@ public class MusicUtil {
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.DISPLAY_NAME
         };
-        String order = MediaStore.Audio.Media.DEFAULT_SORT_ORDER;
+        String order = MediaStore.Audio.Media.ARTIST;
 
         try {
             cursor = resolver.query(uri, projections, null,
-                    null, order);
+                    null, null);
             if (cursor != null) {
 
                 Log.i(TAG, "Fetch Data...");
@@ -49,7 +49,7 @@ public class MusicUtil {
                             cursor.getString(1),
                             cursor.getString(2),
                             cursor.getString(3),
-                            cursor.getLong(4),
+                            "",
                             cursor.getLong(5),
                             cursor.getString(6),
                             cursor.getString(7)
@@ -71,11 +71,48 @@ public class MusicUtil {
         finally {
             cursor.close();
         }
+
+        Uri albumUri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        String secOrder = MediaStore.Audio.AlbumColumns.ARTIST;
+        String[] secProjections = {
+                MediaStore.Audio.AlbumColumns.ALBUM_ART,
+                MediaStore.Audio.AlbumColumns.ALBUM
+        };
+        Cursor secCursor = null;
+        try {
+            secCursor = context.getContentResolver().query(albumUri, secProjections,
+                    null, null, null);
+
+            ArrayList<String> tempAlbumArtList = new ArrayList<>();
+            ArrayList<String> tempAlbumList = new ArrayList<>();
+            if (secCursor != null) {
+                int i = 0;
+                while (secCursor.moveToNext()) {
+                    tempAlbumArtList.add(secCursor.getString(0));
+                    tempAlbumList.add(secCursor.getString(1));
+                    i++;
+                }
+            }
+
+            List<MusicData> mediaPathList = new ArrayList<>(musicData);
+
+            for (MusicData mediaData : mediaPathList) {
+                int j = tempAlbumList.indexOf(mediaData.getAlbum());
+                if(j != -1)
+                    mediaData.setAlbumId(tempAlbumArtList.get(j));
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            secCursor.close();
+        }
+
+
         return musicData;
     }
 
-    String ALBUM_URI = "content://media/external/audio/albums";
-    Uri albumUri=MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-    String thumbnail=MediaStore.Audio.Albums.ALBUM_ART; String id=MediaStore.Audio.Albums._ID;
 
 }

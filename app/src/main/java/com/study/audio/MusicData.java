@@ -9,12 +9,12 @@ public class MusicData implements Parcelable{
     private String title;
     private String artist;
     private String album;
-    private long albumId;
+    private String albumId;
     private long duration;
     private String path;
     private String displayname;
 
-    public MusicData(long id, String title, String artist, String album, long albumId, long duration, String path, String displayname) {
+    public MusicData(long id, String title, String artist, String album, String albumId, long duration, String path, String displayname) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -30,7 +30,7 @@ public class MusicData implements Parcelable{
         title = in.readString();
         artist = in.readString();
         album = in.readString();
-        albumId = in.readLong();
+        albumId = in.readString();
         duration = in.readLong();
         path = in.readString();
         displayname = in.readString();
@@ -80,11 +80,11 @@ public class MusicData implements Parcelable{
         this.album = album;
     }
 
-    public long getAlbumId() {
+    public String getAlbumId() {
         return albumId;
     }
 
-    public void setAlbumId(long albumId) {
+    public void setAlbumId(String albumId) {
         this.albumId = albumId;
     }
 
@@ -123,7 +123,7 @@ public class MusicData implements Parcelable{
         parcel.writeString(title);
         parcel.writeString(artist);
         parcel.writeString(album);
-        parcel.writeLong(albumId);
+        parcel.writeString(albumId);
         parcel.writeLong(duration);
         parcel.writeString(path);
         parcel.writeString(displayname);

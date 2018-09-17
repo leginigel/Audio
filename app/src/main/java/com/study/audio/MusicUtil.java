@@ -1,4 +1,4 @@
-package com.study.audio.ui;
+package com.study.audio;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.TextView;
-
-import com.study.audio.MusicData;
 
 import java.util.ArrayList;
 import java.util.List;

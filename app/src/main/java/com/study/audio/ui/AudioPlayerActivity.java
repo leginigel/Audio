@@ -1,11 +1,14 @@
 package com.study.audio.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +22,18 @@ import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.study.audio.MusicData;
+import com.study.audio.MyMediaPlayer;
 import com.study.audio.R;
 
+import java.io.IOException;
 import java.util.List;
+
+import static android.media.AudioManager.STREAM_MUSIC;
 
 public class AudioPlayerActivity extends AppCompatActivity {
 
@@ -34,6 +42,12 @@ public class AudioPlayerActivity extends AppCompatActivity {
     private TextView artistTextView;
     private int currentPosition;
     private ImageView albumImg;
+    private ImageView previousImg;
+    private ImageView playImg;
+    private ImageView nextImg;
+    private MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
+    private int volume = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +60,14 @@ public class AudioPlayerActivity extends AppCompatActivity {
         albumImg = findViewById(R.id.album_art);
         titleTextView = findViewById(R.id.song_title);
         artistTextView = findViewById(R.id.song_artist);
-
-        RequestOptions requestOptions =
-                new RequestOptions().centerCrop()
-                        .placeholder(R.drawable.ic_album_black_24dp);
-        Glide.with(this)
-                .load(musicDataList.get(currentPosition).getAlbumId())
-                .apply(requestOptions)
-                .into(albumImg);
-
-        titleTextView.setText(musicDataList.get(currentPosition).getTitle());
-        artistTextView.setText(musicDataList.get(currentPosition).getArtist());
+        previousImg = findViewById(R.id.button_previous);
+        playImg = findViewById(R.id.button_play);
+        nextImg = findViewById(R.id.button_next);
 
         final ClickListener clickListener = new ClickListener();
-        findViewById(R.id.button_previous).setOnClickListener(clickListener);
-        findViewById(R.id.button_play).setOnClickListener(clickListener);
-        findViewById(R.id.button_next).setOnClickListener(clickListener);
+        previousImg.setOnClickListener(clickListener);
+        playImg.setOnClickListener(clickListener);
+        nextImg.setOnClickListener(clickListener);
 
         Button b = (Button) findViewById(R.id.button_vol);
         b.setOnClickListener(new View.OnClickListener(){
@@ -111,6 +117,39 @@ public class AudioPlayerActivity extends AppCompatActivity {
             }
         });
 
+        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            volume = audioManager.getStreamVolume(STREAM_MUSIC);
+        }
+        mediaPlayer = MyMediaPlayer.getMediaPlayer();
+        mediaPlayer.setVolume(volume, volume);
+        playMusic();
+    }
+
+    void setMusicDisplay(){
+        RequestOptions requestOptions =
+                new RequestOptions().centerCrop()
+                        .placeholder(R.drawable.ic_album_black_24dp);
+        Glide.with(this)
+                .load(musicDataList.get(currentPosition).getAlbumId())
+                .apply(requestOptions)
+                .into(albumImg);
+
+        titleTextView.setText(musicDataList.get(currentPosition).getTitle());
+        artistTextView.setText(musicDataList.get(currentPosition).getArtist());
+    }
+
+    void playMusic() {
+            setMusicDisplay();
+            mediaPlayer.reset();
+            try {
+                mediaPlayer.setDataSource(musicDataList.get(currentPosition).getPath());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            playImg.setSelected(false);
     }
 
     private class ClickListener implements View.OnClickListener {
@@ -121,13 +160,31 @@ public class AudioPlayerActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.button_previous:
-
+                    if (currentPosition > 0) {
+                        currentPosition--;
+                        playMusic();
+                    } else {
+                        Toast.makeText(AudioPlayerActivity.this, "No previous song~~~", Toast.LENGTH_SHORT).show();
+                        mediaPlayer.stop();
+                    }
                     break;
                 case R.id.button_play:
-
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+//                        playImg.setSelected(true);
+                    } else {
+                        mediaPlayer.start();
+//                        playImg.setSelected(false);
+                    }
                     break;
                 case R.id.button_next:
-
+                    if (currentPosition < musicDataList.size()-1) {
+                        currentPosition++;
+                        playMusic();
+                    } else {
+                        Toast.makeText(AudioPlayerActivity.this, "No Next song~~~", Toast.LENGTH_SHORT).show();
+                        mediaPlayer.stop();
+                    }
                     break;
             }
         }

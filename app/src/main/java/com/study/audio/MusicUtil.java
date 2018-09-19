@@ -12,6 +12,7 @@ import java.util.List;
 
 public class MusicUtil {
     private static final String TAG = MusicUtil.class.getName();
+    public static List<String> mAlbumList, mAlbumArtList;
 
     public static List<MusicData> getMusicData(Context context){
 
@@ -32,9 +33,16 @@ public class MusicUtil {
                 MediaStore.Audio.Media.DISPLAY_NAME
         };
         String order = MediaStore.Audio.Media.ARTIST;
+        String select = "("+ MediaStore.Audio.Media.ARTIST +"!='<unknown>')";
+        String[] selectionArgs = {""};
+        selectionArgs[0] = "Edith Piaf";
+//        selectionArgs[1] = "Cinephile";
+//        selectionArgs[2] = "Belzifer";
+//        selectionArgs[3] = "MasStream";
+//        selectionArgs[4] = "DanteLanza";
 
         try {
-            cursor = resolver.query(uri, projections, null,
+            cursor = resolver.query(uri, projections, select,
                     null, null);
             if (cursor != null) {
 
@@ -51,11 +59,6 @@ public class MusicUtil {
                             cursor.getString(6),
                             cursor.getString(7)
                     );
-                    Log.v("title: ", cursor.getString(1));
-                    Log.v("artist: ", cursor.getString(2));
-                    Log.v("album: ", cursor.getString(3));
-                    Log.v("path: ", cursor.getString(6));
-                    Log.v("dpname: ", cursor.getString(7));
 
                     musicData.add(data);
                 }
@@ -87,13 +90,17 @@ public class MusicUtil {
                 while (secCursor.moveToNext()) {
                     tempAlbumArtList.add(secCursor.getString(0));
                     tempAlbumList.add(secCursor.getString(1));
+                    Log.v("Album","tempAlbumList : "+secCursor.getString(1));
                     i++;
                 }
             }
 
-            List<MusicData> mediaPathList = new ArrayList<>(musicData);
+            mAlbumArtList = tempAlbumArtList;
+            mAlbumList = tempAlbumList;
 
-            for (MusicData mediaData : mediaPathList) {
+//            List<MusicData> mediaPathList = new ArrayList<>(musicData);
+
+            for (MusicData mediaData : musicData) {
                 int j = tempAlbumList.indexOf(mediaData.getAlbum());
                 if(j != -1)
                     mediaData.setAlbumId(tempAlbumArtList.get(j));
@@ -111,5 +118,11 @@ public class MusicUtil {
         return musicData;
     }
 
+    public List<String> getAlbumList() {
+        return mAlbumList;
+    }
 
+    public List<String> getAlbumArtList() {
+        return mAlbumArtList;
+    }
 }

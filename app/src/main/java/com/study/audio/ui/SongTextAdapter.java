@@ -3,26 +3,36 @@ package com.study.audio.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.study.audio.MusicData;
 import com.study.audio.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SongTextAdapter extends RecyclerView.Adapter<SongTextAdapter.ViewHolder>{
 
     private Context mContext;
     private MediaMetadataCompat media;
+    private List<MusicData> musicDataList;
 
 
-    public SongTextAdapter() {
+    public SongTextAdapter(List<MusicData> musicDataList) {
         // TODO: 2018/9/3 Constructor with Music Structure
+                this.musicDataList = musicDataList;
     }
 
     @NonNull
@@ -42,20 +52,17 @@ public class SongTextAdapter extends RecyclerView.Adapter<SongTextAdapter.ViewHo
 
         // TODO: 2018/8/20 Load the Media Data
 
-//        media = MusicLibrary.getMetadata(mContext,"Jazz_In_Paris");
-//        holder.albumCardView.setBackgroundResource(R.drawable.album_youtube_audio_library_rock_2);
-//        holder.albumImageView.setImageBitmap(MusicLibrary.getAlbumBitmap(
-//                mContext,
-//                media.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
-//        holder.albumImageView.setBackgroundResource(drawable.ic_media_play);
+        holder.songArtistTextView.setText(musicDataList.get(position).getArtist());
 
-        holder.songTextView.setText("Jazz_In_Paris");
+        holder.songTextView.setText(musicDataList.get(position).getTitle());
         holder.songTextView.setTextColor(Color.BLACK);
+        holder.songTextView.setEllipsize(TextUtils.TruncateAt.END);
+        holder.songTextView.setSingleLine(true);
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return musicDataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -79,7 +86,8 @@ public class SongTextAdapter extends RecyclerView.Adapter<SongTextAdapter.ViewHo
             // TODO: 2018/9/3 Pass the Music Content and Start the Activity
 
             Intent i = new Intent(mContext, AudioPlayerActivity.class);
-            i.putExtra("",0);
+            i.putParcelableArrayListExtra("musicList", (ArrayList<? extends Parcelable>) musicDataList);
+            i.putExtra("currentPosition", getLayoutPosition());
             mContext.startActivity(i);
         }
     }

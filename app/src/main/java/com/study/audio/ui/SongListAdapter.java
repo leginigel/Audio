@@ -63,9 +63,8 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
                 .load(musicDataList.get(position).getAlbumId())
                 .apply(requestOptions)
                 .into(holder.songImageView);
-
-//        holder.songImageView.setImageResource(drawable.ic_media_play);
-//        holder.songImageView.setBackgroundColor(Color.GRAY);
+        
+        holder.songImageView.setBackgroundColor(Color.GRAY);
         holder.songArtistTextView.setText(musicDataList.get(position).getArtist());
 
         holder.songTextView.setText(musicDataList.get(position).getTitle());

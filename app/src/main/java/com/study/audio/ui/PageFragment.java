@@ -55,7 +55,7 @@ public class PageFragment extends Fragment {
         ViewGroup.MarginLayoutParams marginLayoutParams =
                 (ViewGroup.MarginLayoutParams) rv.getLayoutParams();
         //Adapter
-        AlbumGalleryAdapter albumAdapter = new AlbumGalleryAdapter();
+        AlbumGalleryAdapter albumAdapter = new AlbumGalleryAdapter(music);
         SongListAdapter songAdapter = new SongListAdapter(music);
 
         //LayoutManager

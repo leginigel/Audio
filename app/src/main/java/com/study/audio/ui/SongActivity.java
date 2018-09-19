@@ -18,14 +18,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.study.audio.MusicData;
 import com.study.audio.R;
 
+import java.util.List;
+
 public class SongActivity extends AppCompatActivity {
+    private List<MusicData> tempList;
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song);
+
+        tempList = getIntent().getParcelableArrayListExtra("tempList");
+        currentPosition = getIntent().getIntExtra("currentPosition", 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_song);
 //        toolbar.setBackgroundColor(Color.BLACK);
         toolbar.setNavigationIcon(drawable.ic_menu_revert);
@@ -51,11 +62,23 @@ public class SongActivity extends AppCompatActivity {
 
         ImageView collapseImg = (ImageView) findViewById(R.id.img_collapse);
         collapseImg.setBackgroundColor(Color.GRAY);
-        collapseImg.setImageResource(drawable.ic_media_play);
+//        collapseImg.setImageResource(drawable.ic_media_play);
+
+        RequestOptions requestOptions =
+                new RequestOptions().centerCrop()
+                        .placeholder(R.drawable.ic_album_black_24dp);
+
+        String cover = null;
+        if (!tempList.isEmpty()) cover = tempList.get(0).getAlbumId();
+
+        Glide.with(this)
+                .load(cover)
+                .apply(requestOptions)
+                .into(collapseImg);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv_song);
         //Adapter
-        SongTextAdapter songTextAdapter = new SongTextAdapter();
+        SongTextAdapter songTextAdapter = new SongTextAdapter(tempList);
         //LayoutManager
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
